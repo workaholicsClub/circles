@@ -7,8 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
           type="text/css">
     <link rel="stylesheet" href="assets/theme.css" type="text/css">
-    <script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
-    <script src="https://simplewebrtc.com/latest-v3.js"></script>
 </head>
 
 <body>
@@ -18,8 +16,8 @@
             <div class="col-md-6 pb-3">
                 <h1 class="display-4 text-center timer">05:00</h1>
                 <div class="card">
-                    <video style="width: 100%; min-height:300px;background-image: url('assets/video-placeholder.png');background-repeat:no-repeat;background-position:center center;" id="remoteVideos"></video>
-                    <div id="localVideo" style="width: 100px; height: 100px; margin-top: -100px;"></div>
+                    <video id="remoteVideo" autoplay style="width: 100%; min-height:300px;background-image: url('assets/video-placeholder.png');background-repeat:no-repeat;background-position:center center;"></video>
+                    <video id="localVideo" autoplay style="width: 100px; height: 100px; margin-top: -100px;"></video>
                     <div class="card-body">
                         <a href="#" onclick="return false;" class="btn btn-primary btn-lg btn-block continue">Хочу пообщаться еще 5 мин</a>
                         <a href="feedback.html" class="btn btn-block">Стоп!</a>
@@ -46,7 +44,8 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
-</body>
+<script src="https://webrtc.github.io/adapter/adapter-latest.js"></script>
+<script src="js/webrtc.js"></script>
 <script>
     function zeroPad(d) {
         if (d < 10) {
@@ -83,16 +82,6 @@
     document.querySelector('.continue').addEventListener('click', function () {
         timeoutSec += 300;
     });
-
-    let webrtc = new SimpleWebRTC({
-        localVideoEl: 'localVideo',
-        remoteVideosEl: 'remotesVideos',
-        autoRequestMedia: true
-    });
-
-    webrtc.on('readyToCall', function () {
-        webrtc.joinRoom('circles-test');
-    });
 </script>
-
+</body>
 </html>
