@@ -20,16 +20,71 @@
                     <div class="card-body">
                         <h1 class="">Константин Константинопольский</h1>
                         <form class="">
-                            <div class="btn-group btn-group-lg pb-2 pt-5 align-items-center justify-content-center"
-                                 style="width: 100%">
-                                <a href="#" class="btn btn-lg p-2 btn-outline-success"
-                                   style="background-image: url('assets/o-thumbs-up.svg');background-repeat:no-repeat;background-position:center center;background-size:96px; width: 128px; height: 128px;"></a>
-                                <a href="#" class="btn btn-lg btn-outline-danger"
-                                   style="background-image: url('assets/down-o-thumbs.svg');background-repeat:no-repeat;background-position:center center;background-size: 96px; width: 128px; height: 128px"></a>
+                            <div class="btn-group btn-group-toggle btn-group-lg pb-5 pt-4 align-items-center justify-content-center"
+                                 style="width: 100%" data-toggle="buttons">
+                                <label class="btn btn-lg p-2 btn-outline-success"
+                                       style="background-image: url('assets/o-thumbs-up.svg');background-repeat:no-repeat;background-position:center center;background-size:96px; width: 128px; height: 128px;">
+                                    <input type="radio" name="vote" id="vote-yes" autocomplete="off">
+                                </label>
+                                <label  class="btn btn-outline-danger btn-lg"
+                                        style="background-image: url('assets/down-o-thumbs.svg');background-repeat:no-repeat;background-position:center center;background-size: 96px; width: 128px; height: 128px">
+                                    <input type="radio" name="vote" id="vote-now" autocomplete="off">
+                                </label>
                             </div>
-                            <div class="form-group pt-5">
-                                <label class="h3">Подробная информация</label>
-                                <textarea class="form-control" placeholder="Введите полные имя и фамилию"></textarea>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-9">
+                                        <label class="">Собеседник был вежлив?</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="btn-group btn-group-toggle full-width" data-toggle="buttons">
+                                            <label class="btn btn-outline-success">
+                                                <input type="radio" name="feedback-1" autocomplete="off"> Да
+                                            </label>
+                                            <label class="btn btn-outline-danger">
+                                                <input type="radio" name="feedback-1" autocomplete="off"> Нет
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-9">
+                                        <label class="">Было что-то неприемлимое во время разговора?</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="btn-group btn-group-toggle full-width" data-toggle="buttons">
+                                            <label class="btn btn-outline-danger">
+                                                <input type="radio" name="feedback-2" autocomplete="off"> Да
+                                            </label>
+                                            <label class="btn btn-outline-success">
+                                                <input type="radio" name="feedback-2" autocomplete="off"> Нет
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <div class="col-9">
+                                        <label class="">Приятно ли было пообщаться?</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <div class="btn-group btn-group-toggle full-width" data-toggle="buttons">
+                                            <label class="btn btn-outline-success">
+                                                <input type="radio" name="feedback-3" autocomplete="off"> Да
+                                            </label>
+                                            <label class="btn btn-outline-danger">
+                                                <input type="radio" name="feedback-3" autocomplete="off"> Нет
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="">Подробная информация</label>
+                                <textarea class="form-control">Введите ваш отзыв</textarea>
                                 <small class="form-text text-muted"> Данный отзыв предназначен для организации работы
                                     сервиса и не будет показан участнику
                                 </small>
