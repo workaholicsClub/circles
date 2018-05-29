@@ -1,0 +1,30 @@
+version: "2.1"
+
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    command: "npm run start"
+    volumes:
+      - ./server:/var/www/server
+
+  nginx:
+    depends_on:
+        - client
+        - server
+    build: ./etc/nginx
+    volumes:
+      - ./client:/var/www/client
+    ports:
+        - 8082:80
+
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    volumes:
+      - ./client:/var/www/client
+    depends_on:
+      - server
