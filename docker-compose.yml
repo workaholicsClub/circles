@@ -9,6 +9,8 @@ services:
     command: "npm run start"
     volumes:
       - ./server:/var/www/server
+    ports:
+        - 8443:8443
 
   nginx:
     depends_on:
