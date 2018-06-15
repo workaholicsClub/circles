@@ -13,7 +13,8 @@
     "jade": "~1.11.0",
     "morgan": "~1.9.0",
     "socket.io": "^2.1.1",
-    "sockets.io": "^1.0.1"
+    "sockets.io": "^1.0.1",
+    "websocket": "^1.0.26"
   },
   "devDependencies": {
     "nodemon": "^1.17.5"

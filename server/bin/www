@@ -1,73 +1,65 @@
 #!/usr/bin/env node
 
-/**
- * Module dependencies.
- */
-
 let app = require('../app');
+let socketApp = require('../socketApp');
 let debug = require('debug')('server:server');
-const http = require('http');
-const sockets = require('socket.io');
-const initSockets = require('../sockets');
+let WebSocketServer = require('websocket').server;
+let http = require('http');
+let https = require('https');
+var fs = require('fs');
 
-/**
- * Get port from environment and store in Express.
- */
-
-let port = normalizePort(process.env.PORT || '3000');
+let httpPort = normalizePort(process.env.PORT || '3000');
 let socketsPort = normalizePort(process.env.SOCKETS_PORT || '8443');
-app.set('port', port);
 
-/**
- * Create HTTP server.
- */
+let httpServer = http.createServer(app);
+app.set('port', httpPort);
+httpServer.on('error', onError.bind(httpServer));
+httpServer.on('listening', onListening.bind(httpServer));
+httpServer.listen(httpPort);
 
-let server = http.createServer(app);
+let httpsOptions = {
+    key: fs.readFileSync('/var/www/server/ssl/xip.io.key'),
+    cert: fs.readFileSync('/var/www/server/ssl/xip.io.crt')
+};
 
-/**
- * Listen on provided port, on all network interfaces.
- */
+let socketHttpServer = https.createServer(httpsOptions, response404OnNonSocketRequest);
+socketHttpServer.on('error', onError.bind(socketHttpServer));
+socketHttpServer.on('listening', onListening.bind(socketHttpServer));
+socketHttpServer.listen(socketsPort);
+let socketServer = new WebSocketServer({httpServer: socketHttpServer});
+socketServer.on('request', socketApp);
 
-server.listen(port);
-let io = sockets.listen(socketsPort);
+function response404OnNonSocketRequest(request, response) {
+    debug((new Date()) + ' Received request for ' + request.url);
+    response.writeHead(404);
+    response.end();
+}
 
-server.on('error', onError);
-server.on('listening', onListening);
+function normalizePort(portString) {
+    let parsedPort = parseInt(portString, 10);
+    let isNamedPipe = isNaN(parsedPort);
 
-initSockets(io);
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-    let port = parseInt(val, 10);
-
-    if (isNaN(port)) {
-        // named pipe
-        return val;
+    if (isNamedPipe) {
+        return portString;
     }
 
-    if (port >= 0) {
-        // port number
-        return port;
+    if (parsedPort >= 0) {
+        return parsedPort;
     }
 
     return false;
 }
-
-/**
- * Event listener for HTTP server "error" event.
- */
 
 function onError(error) {
     if (error.syscall !== 'listen') {
         throw error;
     }
 
-    let bind = typeof port === 'string'
-        ? 'Pipe ' + port
-        : 'Port ' + port;
+    let server = this;
+    let httpPort = server.address().port;
+    let bind = typeof httpPort === 'string'
+        ? 'Pipe ' + httpPort
+        : 'Port ' + httpPort;
 
     // handle specific listen errors with friendly messages
     switch (error.code) {
@@ -84,11 +76,8 @@ function onError(error) {
     }
 }
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
 function onListening() {
+    let server = this;
     let addr = server.address();
     let bind = typeof addr === 'string'
         ? 'pipe ' + addr

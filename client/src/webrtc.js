@@ -18,9 +18,6 @@ function pageReady() {
     localVideo = document.getElementById('localVideo');
     remoteVideo = document.getElementById('remoteVideo');
 
-    serverConnection = new WebSocket('ws://' + window.location.hostname + ':8443/socket.io/?transport=websocket');
-    serverConnection.onmessage = gotMessageFromServer;
-
     let constraints = {
         video: true,
         audio: true,
@@ -33,29 +30,40 @@ function pageReady() {
     }
 }
 
+function connectToServer() {
+    serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443/', 'video-signalling');
+    serverConnection.onmessage = gotMessageFromServer;
+}
+
 function getUserMediaSuccess(stream) {
     localStream = stream;
     localVideo.srcObject = stream;
+    initPeerConnection(localStream);
+    connectToServer();
 }
 
-function start(isCaller) {
+function initPeerConnection(localMediaStream) {
     peerConnection = new RTCPeerConnection(peerConnectionConfig);
     peerConnection.onicecandidate = gotIceCandidate;
     peerConnection.ontrack = gotRemoteStream;
-    peerConnection.addStream(localStream);
+    peerConnection.addStream(localMediaStream);
+}
 
-    if(isCaller) {
-        peerConnection.createOffer().then(createdDescription).catch(errorHandler);
-    }
+function startCall() {
+    peerConnection.createOffer().then(createdDescription).catch(errorHandler);
 }
 
 function gotMessageFromServer(message) {
-    if(!peerConnection && localStream) start(false);
+    let isStartCallMessage = message.data === 'start';
+    if (isStartCallMessage) {
+        startCall();
+        return;
+    }
 
     let signal = JSON.parse(message.data);
+    console.log(signal);
 
-    // Ignore messages from ourself
-    if(signal.uuid == uuid) return;
+    if (signal.uuid === uuid) return;
 
     if(signal.sdp) {
         peerConnection.setRemoteDescription(new RTCSessionDescription(signal.sdp)).then(function() {
@@ -90,6 +98,7 @@ function gotRemoteStream(event) {
 
 function errorHandler(error) {
     console.log(error);
+    document.getElementById('log').innerHTML = JSON.stringify(error);
 }
 
 // Taken from http://stackoverflow.com/a/105074/515584

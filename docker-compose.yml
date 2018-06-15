@@ -21,6 +21,7 @@ services:
       - ./client:/var/www/client
     ports:
         - 8082:80
+        - 8083:443
 
   client:
     build:

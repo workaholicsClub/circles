@@ -2,7 +2,6 @@ import React, {Component} from "react";
 import CenteredLayout from "../layouts/CenteredLayout";
 import startVideo from "../webrtc.js";
 
-
 class Video extends Component {
     constructor(props) {
         super(props);
@@ -73,7 +72,7 @@ class Video extends Component {
                                backgroundRepeat: "no-repeat",
                                backgroundPosition: "center center"
                            }} />
-                    <video id="localVideo" autoPlay style={{
+                    <video id="localVideo" autoPlay muted style={{
                         width: "100px",
                         height: "100px",
                         marginTop: "-100px"
@@ -91,6 +90,7 @@ class Video extends Component {
                         <li className="list-group-item">О себе: пишу, читаю</li>
                     </ul>
                 </div>
+                <div id="log"></div>
             </CenteredLayout>
         );
     }
