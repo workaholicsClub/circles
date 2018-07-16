@@ -31,7 +31,7 @@ function pageReady() {
 }
 
 function connectToServer() {
-    serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443/', 'video-signalling');
+    serverConnection = new WebSocket('wss://' + window.location.hostname + ':8443/video');
     serverConnection.onmessage = gotMessageFromServer;
 }
 

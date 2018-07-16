@@ -1,10 +1,10 @@
 import React, {Component} from "react";
-import logo from '../images/logo.svg';
+import logoImage from '../images/logo.svg';
 
 class CenteredLayout extends Component {
     render() {
         const logo = this.props.logo ? (
-            <img className="img-fluid d-block mx-5 pb-4" src={logo}/>
+            <img className="img-fluid d-block mx-5 pb-4" src={logoImage}/>
         ): "";
 
         const title = this.props.title ? (

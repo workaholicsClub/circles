@@ -1,15 +1,18 @@
 #!/usr/bin/env node
 
-let app = require('../app');
-let socketApp = require('../socketApp');
-let debug = require('debug')('server:server');
-let WebSocketServer = require('websocket').server;
-let http = require('http');
-let https = require('https');
-var fs = require('fs');
+const app = require('../app');
+const socketApp = require('../socketApp');
+const debug = require('debug')('server:server');
+const WebSocketServer = require('websocket').server;
+const http = require('http');
+const https = require('https');
+const fs = require('fs');
+const QueueManager = require('../models/QueueManager');
 
 let httpPort = normalizePort(process.env.PORT || '3000');
 let socketsPort = normalizePort(process.env.SOCKETS_PORT || '8443');
+
+let queueManager = new QueueManager();
 
 let httpServer = http.createServer(app);
 app.set('port', httpPort);
@@ -27,7 +30,9 @@ socketHttpServer.on('error', onError.bind(socketHttpServer));
 socketHttpServer.on('listening', onListening.bind(socketHttpServer));
 socketHttpServer.listen(socketsPort);
 let socketServer = new WebSocketServer({httpServer: socketHttpServer});
-socketServer.on('request', socketApp);
+socketServer.on('request', function (request) {
+    socketApp(request, queueManager);
+});
 
 function response404OnNonSocketRequest(request, response) {
     debug((new Date()) + ' Received request for ' + request.url);
