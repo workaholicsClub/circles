@@ -1,12 +1,12 @@
 import { observable, action } from 'mobx';
 
 class Store {
-  @observable user = 'user';
-  @observable nextStep = false;
+  @observable user;
 
-  @action toggleNextStep () {
-    this.user = 'newUser'
+  @action
+  addUserFields(values) {
+    this.user = values;
   }
 }
 
-export default new Store()
+export default new Store();

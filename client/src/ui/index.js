@@ -1,1 +1,1 @@
-// export { default as SexInput } from './SexInput'
+export * from './Form';

@@ -1,33 +1,33 @@
-import React, { Component } from 'react'
-import womanPic from './woman-with-dress.svg'
-import manPic from './man.svg'
+import React, { Component } from 'react';
+import womanPic from './woman-with-dress.svg';
+import manPic from './man.svg';
 
 class SexInput extends Component {
   constructor(props) {
-    super(props)
-    this.parentChangeHandler = props.onChange
+    super(props);
+    this.parentChangeHandler = props.onChange;
     this.state = {
       sex: '',
-    }
+    };
   }
 
   handleSexChange(event) {
-    this.setState({ sex: event.target.value })
+    this.setState({ sex: event.target.value });
 
     if (this.parentChangeHandler) {
-      this.parentChangeHandler(event)
+      this.parentChangeHandler(event);
     }
   }
 
   render() {
-    let femaleButtonId = 'sex-female-' + this.props.name
-    let maleButtonId = 'sex-male-' + this.props.name
-    let femaleClass =
-      'btn btn-lg p-2 btn-outline-primary ' +
-      (this.state.sex === 'female' ? 'active' : '')
-    let maleClass =
-      'btn btn-lg btn-outline-primary ' +
-      (this.state.sex === 'male' ? 'active' : '')
+    const femaleButtonId = `sex-female-${this.props.name}`;
+    const maleButtonId = `sex-male-${this.props.name}`;
+    const femaleClass = `btn btn-lg p-2 btn-outline-primary ${
+      this.state.sex === 'female' ? 'active' : ''
+    }`;
+    const maleClass = `btn btn-lg btn-outline-primary ${
+      this.state.sex === 'male' ? 'active' : ''
+    }`;
 
     return (
       <div
@@ -76,8 +76,8 @@ class SexInput extends Component {
           />
         </label>
       </div>
-    )
+    );
   }
 }
 
-export default SexInput
+export default SexInput;

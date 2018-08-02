@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 
 import { CenteredLayout } from '../../layouts/CenteredLayout';
-import RegisterForm from './RegisterForm';
+import RegisterFormOne from './RegisterFormOne';
+import RegisterFormTwo from './RegisterFormTwo';
 
-import profilePic from './blank-profile.svg';
+import profilePic from './images/blank-profile.svg';
 
 @inject('store')
 @inject('UIstore')
@@ -18,30 +19,42 @@ class Register extends Component {
   }
 
   nextStep = (values) => {
-    console.log('values are...', values);
+    console.log('got values...', values);
     // полсылаем данные и переходим к следующему этапу
+    this.store.addUserFields(values);
     this.UIstore.toggleNextStep();
   };
 
-  renderFirstStep = () => (
-    <div className="card">
-      <div style={{ padding: '2rem 6rem' }}>
-        <img className="card-img-top" src={profilePic} alt="" />
+  submitForm = () => {
+    console.log('sending data to server....');
+  };
+
+  renderFormOne = () => (
+    <CenteredLayout logo title="Регистрация">
+      <div className="card">
+        <div style={{ padding: '2rem 6rem' }}>
+          <img className="card-img-top" src={profilePic} alt="" />
+        </div>
+        <div className="card-body">
+          <RegisterFormOne nextStep={this.nextStep} />
+        </div>
       </div>
-      <div className="card-body">
-        <RegisterForm nextStep={this.nextStep} />
-      </div>
-    </div>
+    </CenteredLayout>
+  );
+
+  renderFormTwo = () => (
+    <CenteredLayout title="Дополнительные данные">
+      <RegisterFormTwo submitForm={this.submitForm} />
+    </CenteredLayout>
   );
 
   render() {
     const { registerNextStep } = this.UIstore;
 
-    return (
-      <CenteredLayout logo title="Регистрация">
-        {registerNextStep ? <div> ... </div> : this.renderFirstStep()}
-      </CenteredLayout>
-    );
+    if (registerNextStep) {
+      return this.renderFormTwo();
+    }
+    return this.renderFormOne();
   }
 }
 

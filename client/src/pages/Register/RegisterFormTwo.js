@@ -2,9 +2,9 @@ import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { SexInput } from '../../ui/SexInput';
+import { SexInput } from '../../ui/Form';
 
-const RegisterForm = (props) => {
+const RegisterFormTwo = (props) => {
   const {
     values,
     errors,
@@ -28,14 +28,15 @@ const RegisterForm = (props) => {
       />
       {errors.sex && <div style={{ color: 'red' }}> {errors.sex}</div>}
       <div className="form-group">
-        <div className="row">
-          <label className="col">Имя</label>
-        </div>
+        <label htmlFor="username" className="col">
+          Имя
+        </label>
+
         <input
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.username}
-          // error={!!errors.username}
+          error={errors.username}
           type="text"
           id="username"
           name="username"
@@ -48,12 +49,14 @@ const RegisterForm = (props) => {
           )}
       </div>
       <div className="form-group">
-        <label className="">Дата рождения</label>
+        <label htmlFor="birthday" className="">
+          Дата рождения
+        </label>
         <input
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.birthday}
-          // error={!!errors.birthday}
+          error={errors.birthday}
           type="date"
           name="birthday"
           id="birthday"
@@ -90,5 +93,5 @@ const formikEnhancer = withFormik({
   displayName: 'RegisterForm',
 });
 
-export default formikEnhancer(RegisterForm);
+export default formikEnhancer(RegisterFormTwo);
 // export default RegisterForm

@@ -1,34 +1,32 @@
-import React, { Component } from 'react'
-import logoImage from './logo.svg'
+import React from 'react';
+import logoImage from './logo.svg';
 
-class CenteredLayout extends Component {
-  render() {
-    const logo = this.props.logo ? (
-      <img alt="logo" className="img-fluid d-block mx-5 pb-4" src={logoImage} />
-    ) : (
-      ''
-    )
+const CenteredLayout = (props) => {
+  const { logo, title, children } = props;
 
-    const title = this.props.title ? (
-      <h1 className="display-4 text-center">{this.props.title}</h1>
-    ) : (
-      ''
-    )
+  const showLogo = () => {
+    if (logo) {
+      return <img alt="logo" className="img-fluid d-block mx-5 pb-4" src={logoImage} />;
+    }
+    return null;
+  };
 
-    return (
-      <div className="py-5">
-        <div className="container">
-          <div className="row align-items-center justify-content-center">
-            <div className="col-md-6">
-              {logo}
-              {title}
-              {this.props.children}
-            </div>
-          </div>
-        </div>
+  const showTitle = () => {
+    if (title) {
+      return <h1 className="display-4 text-center">{title}</h1>;
+    }
+    return null;
+  };
+
+  return (
+    <div className="row align-items-center justify-content-center">
+      <div className="col-md-6">
+        {showLogo()}
+        {showTitle()}
+        {children}
       </div>
-    )
-  }
-}
+    </div>
+  );
+};
 
-export default CenteredLayout
+export default CenteredLayout;
