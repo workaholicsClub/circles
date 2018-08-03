@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import manPic from './images/man.svg';
 import womanPic from './images/woman-with-dress.svg';
 
-import { RadioImgInput } from '../../ui/Form';
+import { RadioImgInput, BasicInput } from '../../ui/Form';
 
 const RegisterFormOne = (props) => {
   const {
@@ -24,50 +24,47 @@ const RegisterFormOne = (props) => {
       <RadioImgInput
         onChange={handleChange}
         onBlur={handleBlur}
-        value={values.testing}
+        value={values.sex}
         name="sex"
-        items={[
-          { image: womanPic, value: 'woman' },
-          { image: manPic, value: 'male' },
-        ]}
+        items={[{ image: womanPic, value: 'woman' }, { image: manPic, value: 'male' }]}
       />
-      {errors.sex && <div style={{ color: 'red' }}> {errors.sex}</div>}
+      {errors.sex && touched.sex && <div style={{ color: 'red' }}>{errors.sex}</div>}
+      <div className="form-group">
+        <BasicInput
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.email}
+          type="text"
+          name="email"
+          title="Электронная почта"
+        />
+        {errors.email && touched.email && <div style={{ color: 'red' }}> {errors.email}</div>}
+      </div>
 
       <div className="form-group">
-        <div className="row">
-          <label className="col">Имя</label>
-        </div>
-        <input
+        <BasicInput
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.username}
-          // error={!!errors.username}
           type="text"
           name="username"
-          className="form-control"
+          title="Имя"
           placeholder="Введите полные имя и фамилию"
         />
         {errors.username &&
-          touched.username && (
-            <div style={{ color: 'red' }}> {errors.username}</div>
-          )}
+          touched.username && <div style={{ color: 'red' }}> {errors.username}</div>}
       </div>
       <div className="form-group">
-        <div className="row">
-          <label className="col">Дата рождения</label>
-        </div>
-        <input
+        <BasicInput
           onChange={handleChange}
           onBlur={handleBlur}
           value={values.birthday}
           type="date"
           name="birthday"
-          className="form-control"
+          title="Дата рождения"
         />
         {errors.birthday &&
-          touched.birthday && (
-            <div style={{ color: 'red' }}> {errors.birthday}</div>
-          )}
+          touched.birthday && <div style={{ color: 'red' }}> {errors.birthday}</div>}
       </div>
       <button
         disabled={!dirty || isSubmitting}
@@ -84,14 +81,20 @@ const formikEnhancer = withFormik({
   mapPropsToValues: () => ({
     username: '',
     birthday: '',
+    email: '',
+    sex: '',
   }),
   validationSchema: Yup.object().shape({
     username: Yup.string().required('Введите имя'),
+    email: Yup.string()
+      .email('Введите верный e-mail')
+      .required('Введите e-mail'),
     sex: Yup.string().required('Выберете пол'),
     birthday: Yup.date().required('Укажите дату рождения'),
   }),
-  handleSubmit: async (values, { setSubmitting, props: { nextStep } }) => {
+  handleSubmit: async (values, { setTouched, setSubmitting, props: { nextStep } }) => {
     setSubmitting(false);
+    setTouched(true);
     nextStep(values);
   },
   displayName: 'RegisterForm',

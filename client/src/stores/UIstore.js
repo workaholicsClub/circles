@@ -1,12 +1,14 @@
 import { observable, action } from 'mobx';
 
 class UIstore {
+  @observable registerStep = 1;
 
-  @observable registerNextStep = false;
+  @action
+  toggleNextStep() {
+    this.registerStep += 1;
 
-  @action toggleNextStep () {
-    this.registerNextStep = !this.registerNextStep
+    console.log('next step', this.registerStep);
   }
 }
 
-export default new UIstore()
+export default new UIstore();

@@ -5,6 +5,7 @@ import { observer, inject } from 'mobx-react';
 import { CenteredLayout } from '../../layouts/CenteredLayout';
 import RegisterFormOne from './RegisterFormOne';
 import RegisterFormTwo from './RegisterFormTwo';
+import RegisterFormThree from './RegisterFormThree';
 
 import profilePic from './images/blank-profile.svg';
 
@@ -23,6 +24,9 @@ class Register extends Component {
     // полсылаем данные и переходим к следующему этапу
     this.store.addUserFields(values);
     this.UIstore.toggleNextStep();
+    if (this.UIstore.registerStep > 3) {
+      this.submitForm();
+    }
   };
 
   submitForm = () => {
@@ -44,17 +48,30 @@ class Register extends Component {
 
   renderFormTwo = () => (
     <CenteredLayout title="Дополнительные данные">
-      <RegisterFormTwo submitForm={this.submitForm} />
+      <RegisterFormTwo nextStep={this.nextStep} />
+    </CenteredLayout>
+  );
+
+  renderFormThree = () => (
+    <CenteredLayout title="Ваши предпочтения">
+      <RegisterFormThree nextStep={this.nextStep} />
     </CenteredLayout>
   );
 
   render() {
-    const { registerNextStep } = this.UIstore;
+    const { registerStep } = this.UIstore;
+    console.log(registerStep);
 
-    if (registerNextStep) {
-      return this.renderFormTwo();
+    switch (registerStep) {
+      case 1:
+        return this.renderFormOne();
+      case 2:
+        return this.renderFormTwo();
+      case 3:
+        return this.renderFormThree();
+      default:
+        return <div> Редирект на следующую страницу </div>;
     }
-    return this.renderFormOne();
   }
 }
 

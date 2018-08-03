@@ -2,7 +2,7 @@ import React from 'react';
 import { withFormik } from 'formik';
 import * as Yup from 'yup';
 
-import { SexInput } from '../../ui/Form';
+import { RadioImgInput, BasicInput, Textarea } from '../../ui/Form';
 
 const RegisterFormTwo = (props) => {
   const {
@@ -18,80 +18,111 @@ const RegisterFormTwo = (props) => {
 
   return (
     <form className="" onSubmit={handleSubmit}>
-      <SexInput
-        onChange={handleChange}
-        onBlur={handleBlur}
-        value={values.sex}
-        error={!!errors.sex}
-        id="sex"
-        name="sex"
-      />
-      {errors.sex && <div style={{ color: 'red' }}> {errors.sex}</div>}
-      <div className="form-group">
-        <label htmlFor="username" className="col">
-          Имя
-        </label>
+      <div className="card">
+        <div className="card-body">
+          <div className="form-group">
+            <RadioImgInput
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.status}
+              title="Статус"
+              name="status"
+              items={[
+                { value: 'search', text: 'В поиске' },
+                { value: 'married', text: 'В браке' },
+                { value: 'complicated', text: 'Все сложно' },
+              ]}
+            />
+            {errors.status && touched.status && <div style={{ color: 'red' }}>{errors.status}</div>}
+          </div>
+          <div className="form-group">
+            <RadioImgInput
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.aim}
+              title="Цель"
+              name="aim"
+              items={[
+                { value: 'couple', text: 'Найти пару' },
+                { value: 'chat', text: 'Поболтать' },
+              ]}
+            />
+            {errors.aim && touched.aim && <div style={{ color: 'red' }}> {errors.aim}</div>}
+          </div>
+          <div className="form-group">
+            <RadioImgInput
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.education}
+              title="Образование"
+              name="education"
+              items={[
+                { value: 'base', text: 'Начальное' },
+                { value: 'middle', text: 'Среднее' },
+                { value: 'high', text: 'Высщее' },
+              ]}
+            />
+            {errors.education &&
+              touched.education && <div style={{ color: 'red' }}> {errors.education}</div>}
+          </div>
+          <div className="form-group">
+            <BasicInput
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.phone}
+              type="text"
+              name="phone"
+              title="Телефон для связи"
+              note="Мы покажем этот телефон понравившимся людям с вашего согласия"
+            />
 
-        <input
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.username}
-          error={errors.username}
-          type="text"
-          id="username"
-          name="username"
-          className="form-control"
-          placeholder="Введите полные имя и фамилию"
-        />
-        {errors.username &&
-          touched.username && (
-            <div style={{ color: 'red' }}> {errors.username}</div>
-          )}
+            {errors.phone && touched.phone && <div style={{ color: 'red' }}> {errors.phone}</div>}
+          </div>
+          <div className="form-group">
+            <Textarea
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.about}
+              name="about"
+              title="О себе"
+              note="Расскажите о себе в свободной форме. Что вам нравится? Как вы проводите свободное время?"
+            />
+            {errors.about && touched.about && <div style={{ color: 'red' }}> {errors.about}</div>}
+          </div>
+          <button
+            disabled={!dirty || isSubmitting}
+            className="btn btn-primary btn-block btn-lg"
+            type="submit"
+          >
+            Продолжить
+          </button>
+        </div>
       </div>
-      <div className="form-group">
-        <label htmlFor="birthday" className="">
-          Дата рождения
-        </label>
-        <input
-          onChange={handleChange}
-          onBlur={handleBlur}
-          value={values.birthday}
-          error={errors.birthday}
-          type="date"
-          name="birthday"
-          id="birthday"
-          className="form-control"
-        />
-        {errors.birthday &&
-          touched.birthday && (
-            <div style={{ color: 'red' }}> {errors.birthday}</div>
-          )}
-      </div>
-      <button
-        disabled={!dirty || isSubmitting}
-        className="btn btn-primary btn-block btn-lg"
-        type="submit"
-      >
-        Зарегистрироваться
-      </button>
     </form>
   );
 };
 
 const formikEnhancer = withFormik({
-  mapPropsToValues: () => ({ username: '', birthday: '', sex: '' }),
-  validationSchema: Yup.object().shape({
-    username: Yup.string().required('Введите имя'),
-    sex: Yup.string().required('Выберете пол'),
-    birthday: Yup.date().required('Укажите дату рождения'),
+  mapPropsToValues: () => ({
+    status: '',
+    aim: '',
+    education: '',
+    phone: '',
+    // about: '',
   }),
-  handleSubmit: async (values, { setSubmitting, props: { nextStep } }) => {
+  validationSchema: Yup.object().shape({
+    status: Yup.string().required('Укажите статус'),
+    aim: Yup.string().required('Укажите цель'),
+    education: Yup.string().required('Укажите образование'),
+    phone: Yup.string().required('Укажите телефон'),
+    about: Yup.string().required('Расскажите о себе'),
+  }),
+  handleSubmit: async (values, { setTouched, setSubmitting, props: { nextStep } }) => {
     setSubmitting(false);
+    setTouched(true);
     nextStep(values);
-    // console.log('values are... ', values);
   },
   displayName: 'RegisterForm',
 });
 
 export default formikEnhancer(RegisterFormTwo);
-// export default RegisterForm
