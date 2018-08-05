@@ -2,25 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import TitleWrapper from '../TitleWrapper';
+import NoteWrapper from '../NoteWrapper';
+import InputFieldWrapper from '../InputFieldWrapper';
+import ErrorFiled from '../ErrorField';
+import { Field } from '../../../../node_modules/formik';
 
 const Textarea = (props) => {
   const {
-    title, name, placeholder, onChange, onBlur, value, note,
+    title, name, note, ...rest
   } = props;
 
   return (
-    <React.Fragment>
+    <InputFieldWrapper>
       <TitleWrapper title={title} />
-      <textarea
+      <Field
         name={name}
-        className="form-control"
-        placeholder={placeholder}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
+        render={({ field }) => (
+          <textarea {...field} {...rest} name={name} className="form-control" />
+        )}
       />
-      <small className="form-text">{note}</small>
-    </React.Fragment>
+
+      <NoteWrapper note={note} />
+      <ErrorFiled name={name} />
+    </InputFieldWrapper>
   );
 };
 

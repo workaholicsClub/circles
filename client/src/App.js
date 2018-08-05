@@ -1,5 +1,5 @@
-import { Switch, Route } from 'react-router-dom';
 import React from 'react';
+import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
 
 import './styles/App.css';
 import './styles/theme.css';
@@ -9,7 +9,7 @@ import * as p from './pages';
 import MainLayout from './layouts/MainLayout';
 
 const App = () => (
-  <React.Fragment>
+  <Router>
     <Switch>
       <MainLayout>
         <Route exact path="/" component={p.Home} />
@@ -17,7 +17,7 @@ const App = () => (
       </MainLayout>
       {/* <Route component={p.NotFound} /> */}
     </Switch>
-  </React.Fragment>
+  </Router>
 );
 
 export default App;

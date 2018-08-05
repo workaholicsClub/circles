@@ -1,38 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Field } from 'formik';
 
 import TitleWrapper from '../TitleWrapper';
+import NoteWrapper from '../NoteWrapper';
+import InputFieldWrapper from '../InputFieldWrapper';
+import ErrorFiled from '../ErrorField';
 
-const RadioImgInput = (props) => {
+const BasicInput = (props) => {
   const {
-    type,
-    title,
-    name,
-    placeholder,
-    onChange,
-    onBlur,
-    value,
-    note,
+    name, title, note, ...rest
   } = props;
 
   return (
-    <React.Fragment>
+    <InputFieldWrapper>
       <TitleWrapper title={title} />
-      <input
-        type={type}
+      <Field
         name={name}
-        className="form-control"
-        placeholder={placeholder}
-        onChange={onChange}
-        onBlur={onBlur}
-        value={value}
+        render={({ field }) => <input {...field} {...rest} name={name} className="form-control" />}
       />
-      <small className="form-text">{note}</small>
-    </React.Fragment>
+      <NoteWrapper note={note} />
+      <ErrorFiled name={name} />
+    </InputFieldWrapper>
   );
 };
 
-RadioImgInput.propTypes = {
+BasicInput.propTypes = {
   title: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   type: PropTypes.string,
@@ -40,10 +33,10 @@ RadioImgInput.propTypes = {
   note: PropTypes.string,
 };
 
-RadioImgInput.defaultProps = {
+BasicInput.defaultProps = {
   type: 'text',
   placeholder: '',
   note: '',
 };
 
-export default RadioImgInput;
+export default BasicInput;

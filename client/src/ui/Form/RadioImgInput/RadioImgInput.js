@@ -4,8 +4,11 @@ import { observable, action } from 'mobx';
 import { observer } from 'mobx-react';
 import styled from 'styled-components';
 import cn from 'classnames';
+import { Field } from 'formik';
 
 import TitleWrapper from '../TitleWrapper';
+import ErrorField from '../ErrorField';
+import InputFieldWrapper from '../InputFieldWrapper';
 
 const InputsWrapper = styled.div.attrs({
   className: props =>
@@ -43,58 +46,55 @@ class RadioImgInput extends React.Component {
     this.parentChangeHandler = props.onChange;
   }
 
-  @observable activeInput = ''
+  @observable activeInput = '';
 
-  @action changeButtonHandler = (event) => {
+  @action
+  changeButtonHandler = (event) => {
     const { target } = event;
 
     this.activeInput = target.value;
     if (this.parentChangeHandler) {
       this.parentChangeHandler(event);
     }
-  }
+  };
 
   renderTitle = (title) => {
     if (title) {
-      return (
-        <TitleWrapper title={title} />
-      );
+      return <TitleWrapper title={title} />;
     }
     return null;
-  }
+  };
 
-  renderInputField = (item, name) => {    
+  renderInputField = (item, name) => {
     const lebelCn = cn('btn btn-outline-primary', {
       active: this.activeInput === item.value,
     });
 
     return (
-      <Label
+      <Field
+        name={name}
         key={`label for ${item.value}`}
-        className={lebelCn}
-        image={item.image}
-        onChange={e => this.changeButtonHandler(e)}
-      >
-        {item.text}
-        <RadioInput name={name} value={item.value} />
-      </Label>
+        render={({ field }) => (
+          <Label className={lebelCn} image={item.image} onChange={e => this.changeButtonHandler(e)}>
+            {item.text}
+            <RadioInput {...field} name={name} value={item.value} />
+          </Label>
+        )}
+      />
     );
-  }
+  };
 
   render() {
     const { items, title, name } = this.props;
 
     return (
-      <React.Fragment>
+      <InputFieldWrapper>
         {title && this.renderTitle(title)}
-        <InputsWrapper
-          className="btn-group"
-          image={title}
-          htmlDataToggle="buttons"
-        >
+        <InputsWrapper className="btn-group" image={title} htmlDataToggle="buttons">
           {items.map(item => this.renderInputField(item, name))}
         </InputsWrapper>
-      </React.Fragment>
+        <ErrorField name={name} />
+      </InputFieldWrapper>
     );
   }
 }

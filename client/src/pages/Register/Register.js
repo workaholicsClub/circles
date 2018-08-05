@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { observer, inject } from 'mobx-react';
 
 import { CenteredLayout } from '../../layouts/CenteredLayout';
-import RegisterFormOne from './RegisterFormOne';
-import RegisterFormTwo from './RegisterFormTwo';
-import RegisterFormThree from './RegisterFormThree';
+
+import RegisterMainDataForm from './RegisterMainDataForm';
+import PartnerFilterForm from './PartnerFilterForm';
+import ProfilePersonalDataForm from './ProfilePersonalDataForm';
 
 import profilePic from './images/blank-profile.svg';
 
@@ -33,42 +34,41 @@ class Register extends Component {
     console.log('sending data to server....');
   };
 
-  renderFormOne = () => (
+  renderRegisterMainDataForm = () => (
     <CenteredLayout logo title="Регистрация">
       <div className="card">
         <div style={{ padding: '2rem 6rem' }}>
           <img className="card-img-top" src={profilePic} alt="" />
         </div>
         <div className="card-body">
-          <RegisterFormOne nextStep={this.nextStep} />
+          <RegisterMainDataForm nextStep={this.nextStep} />
         </div>
       </div>
     </CenteredLayout>
   );
 
-  renderFormTwo = () => (
+  renderPartnerFilterForm = () => (
     <CenteredLayout title="Дополнительные данные">
-      <RegisterFormTwo nextStep={this.nextStep} />
+      <PartnerFilterForm nextStep={this.nextStep} />
     </CenteredLayout>
   );
 
-  renderFormThree = () => (
+  renderProfilePersonalDataForm = () => (
     <CenteredLayout title="Ваши предпочтения">
-      <RegisterFormThree nextStep={this.nextStep} />
+      <ProfilePersonalDataForm nextStep={this.nextStep} />
     </CenteredLayout>
   );
 
   render() {
     const { registerStep } = this.UIstore;
-    console.log(registerStep);
 
     switch (registerStep) {
       case 1:
-        return this.renderFormOne();
+        return this.renderRegisterMainDataForm();
       case 2:
-        return this.renderFormTwo();
+        return this.renderProfilePersonalDataForm();
       case 3:
-        return this.renderFormThree();
+        return this.renderPartnerFilterForm();
       default:
         return <div> Редирект на следующую страницу </div>;
     }
