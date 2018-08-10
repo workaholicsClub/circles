@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
-import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'mobx-react';
 
-import './styles/theme.css';
-import './styles/font-awesome.css';
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
+
+import stores from './stores';
 
 ReactDOM.render(
-    <BrowserRouter>
-        <App />
-    </BrowserRouter>,
-    document.getElementById('root')
+  <Provider {...stores}>
+    <App />
+  </Provider>,
+  document.getElementById('root'),
 );
+registerServiceWorker();
