@@ -1,5 +1,7 @@
 let express = require('express');
-let User = require('../mappers/user.js');
+const database = require('../database.js');
+const types = require('sequelize');
+let makeUserMapper = require('../mappers/User.js');
 let router = express.Router();
 
 function uuid4() {
@@ -9,18 +11,51 @@ function uuid4() {
     });
 }
 
-router.post('/create', function(req, res, next) {
+router.post('/create', function(req, res) {
     let uuid = req.param('uuid', uuid4());
     let userProps = req.body;
-    userProps.uuid = uuid;
 
-    User.create(userProps)
-    .then(function () {
-        return User.findOrCreate({where: {uuid: uuid}});
-    })
-    .spread(function (user, isCreated) {
-        res.json(user);
-    });
+    makeUserMapper(database, types).create(uuid, userProps)
+        .then(function (createdUser) {
+            res.json(createdUser);
+        })
+        .catch(function (error) {
+            res.json({
+                success: false,
+                error: error
+            });
+        });
+});
+
+router.post('/update', function(req, res) {
+    let uuid = req.param('uuid', uuid4());
+    let userProps = req.body;
+
+    makeUserMapper(database, types).update(uuid, userProps)
+        .then(function (updatedUser) {
+            res.json(updatedUser);
+        })
+        .catch(function (error) {
+            res.json({
+                success: false,
+                error: error
+            });
+        });
+});
+
+router.get('/info', function(req, res) {
+    let uuid = req.param('uuid', uuid4());
+
+    makeUserMapper(database, types).find(uuid)
+        .then(function (foundUser) {
+            res.json(foundUser);
+        })
+        .catch(function (error) {
+            res.json({
+                success: false,
+                error: error
+            });
+        });
 });
 
 module.exports = router;
