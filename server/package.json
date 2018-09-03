@@ -19,9 +19,13 @@
   },
   "devDependencies": {
     "jest": "^23.4.0",
-    "nodemon": "^1.17.5"
+    "nodemon": "^1.17.5",
+    "sqlite3": "^4.0.2"
   },
   "jest": {
-    "modulePaths": ["./"]
+    "modulePaths": [
+      "./"
+    ],
+    "testURL": "http://localhost"
   }
 }

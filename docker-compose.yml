@@ -18,6 +18,12 @@ services:
     depends_on:
         - database
     container_name: server
+    environment:
+      - MYSQL_USER=${DATABASE_USER}
+      - MYSQL_PASSWORD=${DATABASE_PASSWORD}
+      - MYSQL_DATABASE=${DATABASE_SCHEMA}
+      - PORT=3000
+      - SOCKETS_PORT=8443
     build:
       context: .
       dockerfile: server/Dockerfile
